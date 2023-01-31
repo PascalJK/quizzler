@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quizzler/question.dart';
 import 'package:quizzler/quiz_brain.dart';
 
 QuizBrain _quizBrain = QuizBrain();
@@ -33,14 +32,13 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Question> questions = _quizBrain.questions;
   List<Icon> scoreKeeper = [];
 
   int questionNumber = 0;
 
-  void checkAnswer(bool state) {
+  void checkAnswer() {
     Icon icon;
-    if (questions[questionNumber].answer == state) {
+    if (_quizBrain.getAnswer()) {
       icon = const Icon(
         Icons.check,
         color: Colors.green,
@@ -51,12 +49,12 @@ class _QuizPageState extends State<QuizPage> {
         color: Colors.red,
       );
     }
-    scoreKeeper.add(icon);
 
-    if (questionNumber == questions.length - 1) {
-      scoreKeeper.clear();
-      return;
+    if (_quizBrain.hasNextQuestion()) {
+      scoreKeeper.add(icon);
     }
+    
+    _quizBrain.nextQuestion();
   }
 
   @override
@@ -71,7 +69,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[questionNumber].text,
+                _quizBrain.getQuestion(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -94,10 +92,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer(true);
-                  questionNumber != questions.length - 1
-                      ? questionNumber++
-                      : questionNumber = 0;
+                  checkAnswer();
                 });
               },
             ),
@@ -116,10 +111,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer(false);
-                  questionNumber != questions.length - 1
-                      ? questionNumber++
-                      : questionNumber = 0;
+                  checkAnswer();
                 });
               },
             ),
