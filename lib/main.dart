@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/question.dart';
+import 'package:quizzler/quiz_brain.dart';
+
+QuizBrain _quizBrain = QuizBrain();
 
 void main() => runApp(const Quizzler());
 
@@ -30,18 +33,8 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Question> questions = _quizBrain.questions;
   List<Icon> scoreKeeper = [];
-
-  List<Question> questions = [
-    Question("Who let the dogs out.", true),
-    Question("Dart is similar to C#", true),
-    Question("Dart is an OOP focused language", true),
-    Question("Xamarin is better than Flutter", false),
-    Question("Dart Maps are dynamic by default", true),
-    Question("Bolo is a china-men", true),
-    Question("Solo is a china-man", false),
-    Question("Dolo is a china-wo-man", false),
-  ];
 
   int questionNumber = 0;
 
