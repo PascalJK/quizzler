@@ -36,9 +36,9 @@ class _QuizPageState extends State<QuizPage> {
 
   int questionNumber = 0;
 
-  void checkAnswer() {
+  void checkAnswer(bool pickedAnswer) {
     Icon icon;
-    if (_quizBrain.getAnswer()) {
+    if (_quizBrain.getAnswer() == pickedAnswer) {
       icon = const Icon(
         Icons.check,
         color: Colors.green,
@@ -53,7 +53,7 @@ class _QuizPageState extends State<QuizPage> {
     if (_quizBrain.hasNextQuestion()) {
       scoreKeeper.add(icon);
     }
-    
+
     _quizBrain.nextQuestion();
   }
 
@@ -92,7 +92,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer();
+                  checkAnswer(true);
                 });
               },
             ),
@@ -111,7 +111,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer();
+                  checkAnswer(false);
                 });
               },
             ),
