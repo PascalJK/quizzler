@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler/question.dart';
 
 void main() => runApp(const Quizzler());
 
@@ -31,23 +32,22 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
-  List<String> questions = [
-    "Question 1",
-    "Question 2",
-    "Question's 3",
+  List<Question> questions = [
+    Question("Who let the dogs out.", true),
+    Question("Dart is similar to C#", true),
+    Question("Dart is an OOP focused language", true),
+    Question("Xamarin is better than Flutter", false),
+    Question("Dart Maps are dynamic by default", true),
+    Question("Bolo is a china-men", true),
+    Question("Solo is a china-man", false),
+    Question("Dolo is a china-wo-man", false),
   ];
-
-  List<bool> answers = [false, true, true];
 
   int questionNumber = 0;
 
   void checkAnswer(bool state) {
-    if (questionNumber == questions.length - 1) {
-      scoreKeeper.clear();
-      return;
-    }
     Icon icon;
-    if (answers[questionNumber] == state) {
+    if (questions[questionNumber].answer == state) {
       icon = const Icon(
         Icons.check,
         color: Colors.green,
@@ -59,6 +59,11 @@ class _QuizPageState extends State<QuizPage> {
       );
     }
     scoreKeeper.add(icon);
+
+    if (questionNumber == questions.length - 1) {
+      scoreKeeper.clear();
+      return;
+    }
   }
 
   @override
@@ -73,7 +78,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[questionNumber],
+                questions[questionNumber].text,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
