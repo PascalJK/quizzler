@@ -36,25 +36,63 @@ class _QuizPageState extends State<QuizPage> {
 
   int questionNumber = 0;
 
+  _showGameOverAlertDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('Quiz Completed'),
+                Text("You've reached the end of the quiz"),
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                  child: const Text('Restart'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    resetQuestions();
+                  }),
+            ],
+          );
+        });
+  }
+
+  void resetQuestions() {
+    setState(() {
+      _quizBrain.resetQuestionNumber();
+      scoreKeeper.clear();
+    });
+  }
+
   void checkAnswer(bool pickedAnswer) {
     Icon icon;
-    if (_quizBrain.getAnswer() == pickedAnswer) {
-      icon = const Icon(
-        Icons.check,
-        color: Colors.green,
-      );
-    } else {
-      icon = const Icon(
-        Icons.close,
-        color: Colors.red,
-      );
-    }
 
-    if (_quizBrain.hasNextQuestion()) {
-      scoreKeeper.add(icon);
-    }
+    setState(() {
+      if (_quizBrain.getAnswer() == pickedAnswer) {
+        icon = const Icon(
+          Icons.check,
+          color: Colors.green,
+        );
+      } else {
+        icon = const Icon(
+          Icons.close,
+          color: Colors.red,
+        );
+      }
 
-    _quizBrain.nextQuestion();
+      if (scoreKeeper.length != _quizBrain.questionsLength()) {
+        scoreKeeper.add(icon);
+      }
+
+      if (scoreKeeper.length == _quizBrain.questionsLength()) {
+        _showGameOverAlertDialog();
+      }
+
+      _quizBrain.nextQuestion();
+    });
   }
 
   @override
@@ -91,9 +129,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  checkAnswer(true);
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -110,9 +146,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  checkAnswer(false);
-                });
+                checkAnswer(false);
               },
             ),
           ),

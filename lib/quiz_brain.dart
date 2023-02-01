@@ -43,8 +43,7 @@ class QuizBrain {
     if (_questionNumber < _questions.length - 1) _questionNumber++;
   }
 
-  bool hasNextQuestion() {
-    if (_questionNumber < _questions.length - 1) return true;
-    return false;
-  }
+  int questionsLength() => _questions.length;
+
+  void resetQuestionNumber() => _questionNumber = 0;
 }
